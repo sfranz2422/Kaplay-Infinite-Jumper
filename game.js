@@ -1,14 +1,12 @@
 
 scene("game", (data) => {
-const bankName = data?.bankName || "htmlBasics";
+const questionBank = QUIZ_BANKS[data.bankName]
 
-const questionBank = QUIZ_BANKS[data.bankName] || QUIZ_BANKS.htmlBasics;
-
-
+console.log(questionBank)
 const speed = 100;
 const floorY = 680;
-let nextQuizHeight = 1500;
-const quizInterval = 1600;
+// let nextQuizHeight = 700;
+// const quizInterval = 800;
 let gamePaused = false;
 let quizUI = [];
 let playerDiameter = 16;
@@ -17,7 +15,7 @@ let correctCount = 0;
 let wrongCount = 0;
 let bestHeight =  floorY; // we’ll re-init after player is created
 const rng = makeRNG(Date.now()); // or pass a fixed number for repeatable maps
-const QUIZ_EVERY = 1000;   // pixels climbed between questions
+const QUIZ_EVERY = 700;   // pixels climbed between questions
 let baseFeetY = null
 let nextQuizAt = null;     // first quiz after 200px of climb
 let fire = null
@@ -86,7 +84,7 @@ const scoreLabel = add([
 
 
 onKeyPress((key) => {
-    if (key === "space" && player.isGrounded()) {
+    if ((key === "space" && player.isGrounded()) ||(key === "up" && player.isGrounded()) ) {
         player.jump(400);
     }
 });
@@ -119,6 +117,7 @@ function spawnPlatform(x, y) {
         color("#3ddc97"),
         "platform",
         "passthroughPlatform",
+
     ]);
 }
 
@@ -137,11 +136,17 @@ function randRange(min, max) {
   return min + (max - min) * rng();
 }
 // generate upward ladder
-for (let i = 0; i < 80; i++) {
-    spawnPlatform(randRange(10, width()/2.8), 580 - i * 50);
-    spawnPlatform(randRange(0, width()/2), 580 - i * 50);
+for (let i = 0; i <= 80; i++) {
+    spawnPlatform(randRange(0, width()), 580 - i * 50);
+    spawnPlatform(randRange(50, width()), 580 - i * 50);
+    spawnPlatform(randRange(100, width()), 580 - i * 50);
+ spawnPlatform(randRange(150, width()), 580 - i * 50);
+ spawnPlatform(randRange(200, width()), 580 - i * 50);
+
 
 }
+
+
 
 // quiz helpers
 function getQuestion() {
@@ -276,7 +281,7 @@ function correctReward() {
 function wrongPenalty() {
     shake(12);
     flash("#cc425e", 0.2);
-    player.pos.y += 30;
+    player.pos.y += 300;
 }
 
 function showFeedbackAndResume(msg, correct) {
@@ -354,7 +359,7 @@ function spawnFire(){
 
      add([
         rect(playerDiameter, playerDiameter, { radius: 30 }),
-        pos(randRange(0,width()), player.pos.y - height()),
+        pos(randRange(Math.floor(player.pos.x)-300,Math.floor(player.pos.x)+300), player.pos.y - height()),
         body(),
         area({collisionIgnore: ["passthroughPlatform"]}),
         color("#B22222"),
@@ -374,9 +379,9 @@ wait(3, () => {
     go("menu");
 
 })
-
-
 });
+
+
 
 // player.onCollide("fire", (fire)=>{
 //     addKaboom(player.pos.x,player.pos.y);
@@ -392,7 +397,7 @@ wait(3, () => {
 //     spawnFire();
 // }, 2000);
 
-const fireLoop = loop(2, () => {
+const fireLoop = loop(1, () => {
   spawnFire();
 });
 

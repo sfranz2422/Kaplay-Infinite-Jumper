@@ -1,1 +1,1 @@
-# Kaply Infinite Jumper
+# Kaplay Infinite Jumper
