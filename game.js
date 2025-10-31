@@ -375,7 +375,8 @@ scene("game", (data) => {
         wait(3, () => {
             fireLoop.cancel();
             destroyAll("fire");
-            go("menu");
+            currentLevelName = "Level 1"
+            go("gameover", score, currentLevelName);
 
         })
     });
